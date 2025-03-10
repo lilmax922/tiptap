@@ -1,6 +1,6 @@
 <template>
   <div class="border border-gray-300 rounded-lg p-4">
-    <EditorContent :editor="editor" class="prose max-w-none" />
+    <EditorContent :editor="editor" class="prose" />
   </div>
 </template>
 
@@ -12,12 +12,12 @@ import Mention from '@tiptap/extension-mention'
 const editor = useEditor({
   content: '',
   extensions: [
-    StarterKit,  
+    StarterKit,
     Mention
-    .extend({ name: 'command' })
-    .configure({
-      suggestion: TiptapCommandSuggestion
-    })
+      .extend({ name: 'command' })
+      .configure({
+        suggestion: TiptapCommandSuggestion
+      })
   ],
   autofocus: true,
   editable: true,

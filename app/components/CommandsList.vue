@@ -1,26 +1,28 @@
 <script setup lang="ts">
-const {items, command} = defineProps<{
+const props = defineProps<{
   items: any[],
-  command: Function
+  command: Function,
+  editor: any
 }>()
 
 const selectedIndex = ref(0)
 
-const selectItem = (index:number) => {
+const selectItem = (index: number) => {
   selectedIndex.value = index
-  command(items[index])
+  console.log(props.command)
+  props.command({ item: props.items[index] })
 }
 
 function onKeyDown(event: KeyboardEvent) {
-  if (items.length === 0)
+  if (props.items.length === 0)
     return false
 
   if (event.key === 'ArrowUp') {
-    selectedIndex.value = ((selectedIndex.value + items.length) - 1) % items.length
+    selectedIndex.value = ((selectedIndex.value + props.items.length) - 1) % props.items.length
     return true
   }
   else if (event.key === 'ArrowDown') {
-    selectedIndex.value = (selectedIndex.value + 1) % items.length
+    selectedIndex.value = (selectedIndex.value + 1) % props.items.length
     return true
   }
   else if (event.key === 'Enter') {
@@ -31,8 +33,7 @@ function onKeyDown(event: KeyboardEvent) {
   return false
 }
 
-
-watch(() => items, () => {
+watch(() => props.items, () => {
   selectedIndex.value = 0
 })
 

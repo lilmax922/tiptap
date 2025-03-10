@@ -6,8 +6,6 @@ import { PluginKey } from '@tiptap/pm/state'
 import tippy from 'tippy.js'
 import CommandsList  from '~/components/CommandsList.vue'
 
-
-
 export const TiptapCommandSuggestion: Partial<SuggestionOptions> = {
   pluginKey: new PluginKey('command'),
   char: '/',
@@ -15,35 +13,22 @@ export const TiptapCommandSuggestion: Partial<SuggestionOptions> = {
     return [
       {
         title: 'Heading 1',
-        command: ({ editor, range }) => {
-          editor
-            .chain()
-            .focus()
-            .deleteRange(range)
-            .setNode('heading', { level: 1 })
-            .run()
+        command: ({ editor }: { editor: Editor }) => {
+          editor.chain().focus().setNode('heading', { level: 1 }).run()
         },
       },
       {
         title: 'Heading 2',
-        command: ({ editor, range }) => {
-          editor
-            .chain()
-            .focus()
-            .deleteRange(range)
-            .setNode('heading', { level: 2 })
-            .run()
+        command: ({ editor }: { editor: Editor }) => {
+          editor.chain().focus().setNode('heading', { level: 2 }).run()
         },
       },
     ].filter(item => item.title.toLowerCase().startsWith(query.toLowerCase())).slice(0, 10)
   },
   command: ({ editor, props, range }) => {
+    console.log({editor, props, range})
     editor.commands.deleteRange(range)
-    if (typeof props.command === 'function') {
-      props.command(editor)
-      return true
-    }
-    return false
+    props.item.command({ editor, range })
   },
   render: createSuggestionRenderer(CommandsList),
 }
@@ -56,7 +41,7 @@ function createSuggestionRenderer(component: Component): SuggestionOptions['rend
     return {
       onStart(props) {
         renderer = new VueRenderer(component, {
-          props,
+          props: { ...props, editor: props.editor },
           editor: props.editor,
         })
 
