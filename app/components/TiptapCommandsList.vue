@@ -1,28 +1,30 @@
 <script setup lang="ts">
-const props = defineProps<{
+const { items, command } = defineProps<{
   items: any[],
   command: Function,
-  editor: any
 }>()
 
 const selectedIndex = ref(0)
 
-const selectItem = (index: number) => {
+watch(() => items, () => {
+  selectedIndex.value = 0
+})
+
+function selectItem(index: number) {
   selectedIndex.value = index
-  console.log(props.command)
-  props.command({ item: props.items[index] })
+  command(items[index])
 }
 
 function onKeyDown(event: KeyboardEvent) {
-  if (props.items.length === 0)
+  if (items.length === 0)
     return false
 
   if (event.key === 'ArrowUp') {
-    selectedIndex.value = ((selectedIndex.value + props.items.length) - 1) % props.items.length
+    selectedIndex.value = ((selectedIndex.value + items.length) - 1) % items.length
     return true
   }
   else if (event.key === 'ArrowDown') {
-    selectedIndex.value = (selectedIndex.value + 1) % props.items.length
+    selectedIndex.value = (selectedIndex.value + 1) % items.length
     return true
   }
   else if (event.key === 'Enter') {
@@ -32,10 +34,6 @@ function onKeyDown(event: KeyboardEvent) {
 
   return false
 }
-
-watch(() => props.items, () => {
-  selectedIndex.value = 0
-})
 
 defineExpose({
   onKeyDown,

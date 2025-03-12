@@ -1,10 +1,11 @@
 import type { SuggestionOptions } from '@tiptap/suggestion'
 import type { GetReferenceClientRect, Instance } from 'tippy.js'
 import type { Component } from 'vue'
-import { Editor, VueRenderer } from '@tiptap/vue-3'
+import type { Editor } from '@tiptap/vue-3'
+import { VueRenderer } from '@tiptap/vue-3'
 import { PluginKey } from '@tiptap/pm/state'
 import tippy from 'tippy.js'
-import CommandsList  from '~/components/CommandsList.vue'
+import TiptapCommandsList from '~/components/TiptapCommandsList.vue'
 
 export const TiptapCommandSuggestion: Partial<SuggestionOptions> = {
   pluginKey: new PluginKey('command'),
@@ -13,24 +14,23 @@ export const TiptapCommandSuggestion: Partial<SuggestionOptions> = {
     return [
       {
         title: 'Heading 1',
-        command: ({ editor }: { editor: Editor }) => {
+        command: (editor: Editor) => {
           editor.chain().focus().setNode('heading', { level: 1 }).run()
         },
       },
       {
         title: 'Heading 2',
-        command: ({ editor }: { editor: Editor }) => {
+        command: (editor: Editor) => {
           editor.chain().focus().setNode('heading', { level: 2 }).run()
         },
       },
     ].filter(item => item.title.toLowerCase().startsWith(query.toLowerCase())).slice(0, 10)
   },
   command: ({ editor, props, range }) => {
-    console.log({editor, props, range})
     editor.commands.deleteRange(range)
-    props.item.command({ editor, range })
+    props.command(editor)
   },
-  render: createSuggestionRenderer(CommandsList),
+  render: createSuggestionRenderer(TiptapCommandsList),
 }
 
 function createSuggestionRenderer(component: Component): SuggestionOptions['render'] {
@@ -41,7 +41,7 @@ function createSuggestionRenderer(component: Component): SuggestionOptions['rend
     return {
       onStart(props) {
         renderer = new VueRenderer(component, {
-          props: { ...props, editor: props.editor },
+          props,
           editor: props.editor,
         })
 

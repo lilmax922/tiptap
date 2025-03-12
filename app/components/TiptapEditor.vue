@@ -1,29 +1,22 @@
-<template>
-  <div class="border border-gray-300 rounded-lg p-4">
-    <EditorContent :editor="editor" class="prose" />
-  </div>
-</template>
-
 <script setup lang="ts">
-import { useEditor, EditorContent } from '@tiptap/vue-3'
-import StarterKit from '@tiptap/starter-kit'
-import Mention from '@tiptap/extension-mention'
+import { EditorContent } from '@tiptap/vue-3'
 
-const editor = useEditor({
-  content: '',
-  extensions: [
-    StarterKit,
-    Mention
-      .extend({ name: 'command' })
-      .configure({
-        suggestion: TiptapCommandSuggestion
-      })
-  ],
-  autofocus: true,
-  editable: true,
-})
+const editorContent = ref('')
+const placeholder = ref('Type something...')
 
-onBeforeUnmount(() => {
-  editor.value?.destroy()
+const { editor } = useTiptap({
+  content: computed({
+    get: () => editorContent.value,
+    set: (newVal) => {
+      editorContent.value = newVal
+    },
+  }),
+  placeholder: computed(() => placeholder.value),
 })
 </script>
+
+<template>
+  <ClientOnly>
+    <EditorContent :editor="editor" class="prose" />
+  </ClientOnly>
+</template>
