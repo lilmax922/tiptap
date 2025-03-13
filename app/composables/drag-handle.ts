@@ -244,7 +244,7 @@ export function DragHandlePlugin(
       const relatedTarget = event.relatedTarget as HTMLElement
       const isInsideEditor
         = relatedTarget?.classList.contains('tiptap')
-        || relatedTarget?.classList.contains('drag-handle')
+          || relatedTarget?.classList.contains('drag-handle')
 
       if (isInsideEditor)
         return

@@ -118,7 +118,7 @@ export function PlusButtonPlugin(
       const relatedTarget = event.relatedTarget as HTMLElement
       const isInsideEditor
         = relatedTarget?.classList.contains('tiptap')
-        || relatedTarget?.classList.contains('plus-button')
+          || relatedTarget?.classList.contains('plus-button')
 
       if (isInsideEditor)
         return

@@ -17,6 +17,9 @@ const { editor } = useTiptap({
 
 <template>
   <ClientOnly>
-    <EditorContent :editor="editor" class="prose" />
+    <EditorContent
+      :editor="editor"
+      class="prose"
+    />
   </ClientOnly>
 </template>

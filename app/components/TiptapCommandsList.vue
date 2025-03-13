@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const { items, command } = defineProps<{
-  items: any[],
-  command: Function,
+  items: any[]
+  command: Function
 }>()
 
 const selectedIndex = ref(0)
@@ -47,11 +47,13 @@ defineExpose({
       :key="index"
       :class="[
         'w-full text-left px-4 py-2 hover:bg-gray-100 transition-colors duration-150',
-        { 'bg-gray-100': index === selectedIndex }
+        { 'bg-gray-100': index === selectedIndex },
       ]"
       @click="selectItem(index)"
     >
-      <div class="font-medium text-gray-800">{{ item.title }}</div>
+      <div class="font-medium text-gray-800">
+        {{ item.title }}
+      </div>
     </button>
   </div>
 </template>
