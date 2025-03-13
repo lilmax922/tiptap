@@ -24,7 +24,7 @@ const formatButtons = [
     class="rounded-md border bg-white p-1 shadow-sm"
   >
     <div class="flex items-center gap-1">
-      <button
+      <Button
         v-for="btn in formatButtons"
         :key="btn.name"
         variant="ghost"
@@ -37,7 +37,7 @@ const formatButtons = [
           :is="btn.icon"
           class="size-5"
         />
-      </button>
+      </Button>
     </div>
   </BubbleMenu>
 </template>
