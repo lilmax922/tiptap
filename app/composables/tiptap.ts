@@ -8,6 +8,7 @@ import UnderLine from '@tiptap/extension-underline'
 import Link from '@tiptap/extension-link'
 import Placeholder from '@tiptap/extension-placeholder'
 import Mention from '@tiptap/extension-mention'
+import BubbleMenu from '@tiptap/extension-bubble-menu'
 
 import { TiptapCommandSuggestion } from './suggestion'
 import DragHandle from './drag-handle'
@@ -46,6 +47,11 @@ export function useTiptap(options: UseTiptapOptions) {
         .configure({
           suggestion: TiptapCommandSuggestion,
         }),
+      BubbleMenu.configure({
+        tippyOptions: {
+          placement: 'bottom-start',
+        },
+      }),
       DragHandle.configure({
         position: 'right',
       }),

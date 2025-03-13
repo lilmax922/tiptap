@@ -14,6 +14,7 @@
   "dependencies": {
     "@nuxt/eslint": "1.2.0",
     "@tailwindcss/vite": "^4.0.12",
+    "@tiptap/extension-bubble-menu": "^2.11.5",
     "@tiptap/extension-link": "^2.11.5",
     "@tiptap/extension-mention": "^2.11.5",
     "@tiptap/extension-placeholder": "^2.11.5",
@@ -23,6 +24,7 @@
     "@tiptap/suggestion": "^2.11.5",
     "@tiptap/vue-3": "^2.11.5",
     "eslint": "^9.0.0",
+    "lucide-vue-next": "^0.479.0",
     "nuxt": "^3.16.0",
     "tailwindcss": "^4.0.12",
     "tippy.js": "^6.3.7",

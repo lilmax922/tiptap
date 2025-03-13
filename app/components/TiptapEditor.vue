@@ -16,7 +16,8 @@ const { editor } = useTiptap({
 </script>
 
 <template>
-  <ClientOnly>
+  <ClientOnly v-if="editor">
+    <TiptapBubbleMenu :editor />
     <EditorContent
       :editor="editor"
       class="prose"
