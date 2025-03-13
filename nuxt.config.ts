@@ -1,13 +1,12 @@
-import tailwindcss from '@tailwindcss/vite'
-
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  modules: ['@nuxt/eslint', '@nuxtjs/tailwindcss', 'shadcn-nuxt'],
 
-  modules: ['@nuxt/eslint'],
   devtools: { enabled: true },
 
   css: [
-    '~/styles/main.css',
+    '~/styles/global.css',
+    '~/styles/tiptap.css',
   ],
 
   future: {
@@ -17,7 +16,6 @@ export default defineNuxtConfig({
 
   vite: {
     plugins: [
-      tailwindcss(),
     ],
     optimizeDeps: {
       include: [
@@ -30,5 +28,9 @@ export default defineNuxtConfig({
     config: {
       stylistic: true,
     },
+  },
+
+  shadcn: {
+    componentDir: './app/components/ui',
   },
 })
