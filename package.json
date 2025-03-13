@@ -10,6 +10,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@nuxt/eslint": "1.2.0",
     "@tailwindcss/vite": "^4.0.12",
     "@tiptap/extension-link": "^2.11.5",
     "@tiptap/extension-mention": "^2.11.5",
@@ -19,6 +20,7 @@
     "@tiptap/starter-kit": "^2.11.5",
     "@tiptap/suggestion": "^2.11.5",
     "@tiptap/vue-3": "^2.11.5",
+    "eslint": "^9.0.0",
     "nuxt": "^3.16.0",
     "tailwindcss": "^4.0.12",
     "tippy.js": "^6.3.7",
@@ -26,6 +28,7 @@
   },
   "packageManager": "pnpm@10.3.0+sha512.ee592eda8815a8a293c206bb0917c4bb0ff274c50def7cbc17be05ec641fc2d1b02490ce660061356bd0d126a4d7eb2ec8830e6959fb8a447571c631d5a2442d",
   "devDependencies": {
-    "@tailwindcss/typography": "^0.5.16"
+    "@tailwindcss/typography": "^0.5.16",
+    "typescript": "^5.8.2"
   }
 }
