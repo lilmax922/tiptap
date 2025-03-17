@@ -1,34 +1,96 @@
 import type { SuggestionOptions } from '@tiptap/suggestion'
 import type { GetReferenceClientRect, Instance } from 'tippy.js'
 import type { Component } from 'vue'
-import type { Editor } from '@tiptap/vue-3'
 import { VueRenderer } from '@tiptap/vue-3'
 import { PluginKey } from '@tiptap/pm/state'
 import tippy from 'tippy.js'
+import { Heading1, Heading2, Heading3, Heading4, ImageIcon, List, ListOrdered, Pilcrow } from 'lucide-vue-next'
 import TiptapCommandsList from '~/components/TiptapCommandsList.vue'
+
+const { open: openFileDialog, files, onCancel, onChange, reset } = useFileDialog()
 
 export const TiptapCommandSuggestion: Partial<SuggestionOptions> = {
   pluginKey: new PluginKey('command'),
   char: '/',
-  items: ({ query }) => {
-    return [
+  items: ({ editor }) => {
+    const commands: Command[] = [
       {
-        title: 'Heading 1',
-        command: (editor: Editor) => {
-          editor.chain().focus().setNode('heading', { level: 1 }).run()
-        },
+        name: 'Hierarchy',
+        id: 'hierarchy',
+        type: 'category',
       },
       {
-        title: 'Heading 2',
-        command: (editor: Editor) => {
-          editor.chain().focus().setNode('heading', { level: 2 }).run()
-        },
+        name: 'Paragraph',
+        id: 'paragraph',
+        type: 'option',
+        isActive: editor.isActive('paragraph'),
+        action: () => editor.chain().focus().setParagraph().run(),
+        icon: Pilcrow,
       },
-    ].filter(item => item.title.toLowerCase().startsWith(query.toLowerCase())).slice(0, 10)
+      {
+        name: 'Heading 1',
+        id: 'heading1',
+        type: 'option',
+        isActive: editor.isActive('heading', { level: 1 }),
+        action: () => editor.chain().focus().setNode('heading', { level: 1 }).run(),
+        icon: Heading1,
+      },
+      {
+        name: 'Heading 2',
+        id: 'heading2',
+        type: 'option',
+        isActive: editor.isActive('heading', { level: 2 }),
+        action: () => editor.chain().focus().setHeading({ level: 2 }).run(),
+        icon: Heading2,
+      },
+      {
+        name: 'Heading 3',
+        id: 'heading3',
+        type: 'option',
+        isActive: editor.isActive('heading', { level: 3 }),
+        action: () => editor.chain().focus().setHeading({ level: 3 }).run(),
+        icon: Heading3,
+      },
+      {
+        name: 'Heading 4',
+        id: 'heading4',
+        type: 'option',
+        isActive: editor.isActive('heading', { level: 4 }),
+        action: () => editor.chain().focus().setHeading({ level: 4 }).run(),
+        icon: Heading4,
+      },
+      {
+        name: 'Lists',
+        id: 'lists',
+        type: 'category',
+      },
+      {
+        name: 'Bullet List',
+        id: 'bullet_list',
+        type: 'option',
+        isActive: editor.isActive('bulletList'),
+        action: () => editor.chain().focus().toggleBulletList().run(),
+        icon: List,
+      },
+      {
+        name: 'Ordered List',
+        id: 'ordered_list',
+        type: 'option',
+        isActive: editor.isActive('orderedList'),
+        action: () => editor.chain().focus().toggleOrderedList().run(),
+        icon: ListOrdered,
+      },
+      {
+        name: 'Insert',
+        id: 'insert',
+        type: 'category',
+      },
+    ]
+    return commands
   },
-  command: ({ editor, props, range }) => {
+  command: ({ editor, props: commandAction, range }) => {
     editor.commands.deleteRange(range)
-    props.command(editor)
+    commandAction()
   },
   render: createSuggestionRenderer(TiptapCommandsList),
 }

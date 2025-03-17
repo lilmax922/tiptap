@@ -1,30 +1,28 @@
 <script setup lang="ts">
-const { items, command } = defineProps<{
-  items: any[]
-  command: Function
+const props = defineProps<{
+  items: Command[]
+  command: CommandHandler<unknown>
 }>()
 
 const selectedIndex = ref(0)
 
-watch(() => items, () => {
-  selectedIndex.value = 0
-})
-
 function selectItem(index: number) {
   selectedIndex.value = index
-  command(items[index])
+  if (props.items[index]!.type === 'option') {
+    props.command(props.items[index]!.action)
+  }
 }
 
 function onKeyDown(event: KeyboardEvent) {
-  if (items.length === 0)
+  if (props.items.length === 0)
     return false
 
   if (event.key === 'ArrowUp') {
-    selectedIndex.value = ((selectedIndex.value + items.length) - 1) % items.length
+    selectedIndex.value = ((selectedIndex.value + props.items.length) - 1) % props.items.length
     return true
   }
   else if (event.key === 'ArrowDown') {
-    selectedIndex.value = (selectedIndex.value + 1) % items.length
+    selectedIndex.value = (selectedIndex.value + 1) % props.items.length
     return true
   }
   else if (event.key === 'Enter') {
@@ -41,19 +39,29 @@ defineExpose({
 </script>
 
 <template>
-  <div class="bg-white rounded-lg shadow-lg border border-gray-200 overflow-hidden max-h-80 overflow-y-auto">
-    <button
+  <div class="max-h-80 max-w-40 overflow-hidden overflow-y-auto rounded-lg border border-gray-200 bg-white shadow-lg">
+    <template
       v-for="(item, index) in items"
-      :key="index"
-      :class="[
-        'w-full text-left px-4 py-2 hover:bg-gray-100 transition-colors duration-150',
-        { 'bg-gray-100': index === selectedIndex },
-      ]"
-      @click="selectItem(index)"
+      :key="item.name"
     >
-      <div class="font-medium text-gray-800">
-        {{ item.title }}
-      </div>
-    </button>
+      <Label
+        v-if="item.type === 'category'"
+        class="px-4 text-sm font-medium text-gray03"
+      >
+        {{ item.name }}
+      </Label>
+      <button
+        v-else
+        class="inline-flex w-full items-center gap-2 px-4 py-2 text-left font-medium text-gray-800 transition-colors duration-150 hover:bg-gray-100"
+        :class="{ 'bg-gray-100': index === selectedIndex }"
+        @click="selectItem(index)"
+      >
+        <component
+          :is="item.icon"
+          class="size-5"
+        />
+        {{ item.name }}
+      </button>
+    </template>
   </div>
 </template>

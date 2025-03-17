@@ -9,6 +9,7 @@ import Link from '@tiptap/extension-link'
 import Placeholder from '@tiptap/extension-placeholder'
 import Mention from '@tiptap/extension-mention'
 import BubbleMenu from '@tiptap/extension-bubble-menu'
+import Image from '@tiptap/extension-image'
 
 import { TiptapCommandSuggestion } from './suggestion'
 import DragHandle from './drag-handle'
@@ -39,6 +40,7 @@ export function useTiptap(options: UseTiptapOptions) {
       StarterKit,
       UnderLine,
       Link,
+      Image,
       Placeholder.configure({
         placeholder: () => placeholder.value!,
       }),
