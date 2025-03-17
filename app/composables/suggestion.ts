@@ -85,6 +85,18 @@ export const TiptapCommandSuggestion: Partial<SuggestionOptions> = {
         id: 'insert',
         type: 'category',
       },
+      {
+        name: 'Image',
+        id: 'image',
+        type: 'option',
+        isActive: false,
+        action: () => {
+
+          // pass the popup instance to the action
+          // so we can close it after the image is inserted
+        },
+        icon: ImageIcon,
+      },
     ]
     return commands
   },
@@ -146,6 +158,7 @@ function createSuggestionRenderer(component: Component): SuggestionOptions['rend
           popup?.hide()
           return true
         }
+        console.log(props)
         return renderer?.ref?.onKeyDown(props.event)
       },
 

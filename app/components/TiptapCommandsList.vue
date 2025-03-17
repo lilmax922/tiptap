@@ -54,13 +54,36 @@ defineExpose({
         v-else
         class="inline-flex w-full items-center gap-2 px-4 py-2 text-left font-medium text-gray-800 transition-colors duration-150 hover:bg-gray-100"
         :class="{ 'bg-gray-100': index === selectedIndex }"
-        @click="selectItem(index)"
+        @click="item.id !== 'image' ? selectItem(index) : null"
       >
-        <component
-          :is="item.icon"
-          class="size-5"
-        />
-        {{ item.name }}
+        <template v-if="item.id !== 'image'">
+          <component
+            :is="item.icon"
+            class="size-5"
+          />
+          {{ item.name }}
+        </template>
+        <Dialog v-else>
+          <DialogTrigger class="inline-flex items-center gap-2">
+            <component
+              :is="item.icon"
+              class="size-5"
+            />
+            {{ item.name }}
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Edit profile</DialogTitle>
+              <DialogDescription>
+                Make changes to your profile here. Click save when you're done.
+              </DialogDescription>
+            </DialogHeader>
+
+            <DialogFooter>
+              Save changes
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </button>
     </template>
   </div>
