@@ -4,12 +4,20 @@ const props = defineProps<{
   command: CommandHandler<unknown>
 }>()
 
+const isImageDialogOpen = ref(false)
+
 const selectedIndex = ref(0)
 
 function selectItem(index: number) {
+  const item = props.items[index]
   selectedIndex.value = index
-  if (props.items[index]!.type === 'option') {
-    props.command(props.items[index]!.action)
+  if (item?.type === 'option') {
+    if (item.id === 'image') {
+      isImageDialogOpen.value = true
+      toggleSuggestionTippyPopup(!isImageDialogOpen.value)
+      return
+    }
+    props.command(item.action)
   }
 }
 
@@ -54,8 +62,9 @@ defineExpose({
         v-else
         class="inline-flex w-full items-center gap-2 px-4 py-2 text-left font-medium text-gray-800 transition-colors duration-150 hover:bg-gray-100"
         :class="{ 'bg-gray-100': index === selectedIndex }"
-        @click="item.id !== 'image' ? selectItem(index) : null"
+        @click="selectItem(index)"
       >
+        <!-- @click="item.id !== 'image' ? selectItem(index): null" -->
         <template v-if="item.id !== 'image'">
           <component
             :is="item.icon"
@@ -63,27 +72,20 @@ defineExpose({
           />
           {{ item.name }}
         </template>
-        <Dialog v-else>
-          <DialogTrigger class="inline-flex items-center gap-2">
-            <component
-              :is="item.icon"
-              class="size-5"
-            />
-            {{ item.name }}
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Edit profile</DialogTitle>
-              <DialogDescription>
-                Make changes to your profile here. Click save when you're done.
-              </DialogDescription>
-            </DialogHeader>
-
-            <DialogFooter>
-              Save changes
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+        <ImagePickerDialog
+          v-else
+          v-model:open="isImageDialogOpen"
+        >
+          <template #trigger>
+            <div class="inline-flex items-center gap-2">
+              <component
+                :is="item.icon"
+                class="size-5"
+              />
+              {{ item.name }}
+            </div>
+          </template>
+        </ImagePickerDialog>
       </button>
     </template>
   </div>

@@ -7,7 +7,8 @@ import tippy from 'tippy.js'
 import { Heading1, Heading2, Heading3, Heading4, ImageIcon, List, ListOrdered, Pilcrow } from 'lucide-vue-next'
 import TiptapCommandsList from '~/components/TiptapCommandsList.vue'
 
-const { open: openFileDialog, files, onCancel, onChange, reset } = useFileDialog()
+let globalPopupInstance: Instance | null = null
+let globalClientRect: GetReferenceClientRect | null = null
 
 export const TiptapCommandSuggestion: Partial<SuggestionOptions> = {
   pluginKey: new PluginKey('command'),
@@ -90,11 +91,7 @@ export const TiptapCommandSuggestion: Partial<SuggestionOptions> = {
         id: 'image',
         type: 'option',
         isActive: false,
-        action: () => {
-
-          // pass the popup instance to the action
-          // so we can close it after the image is inserted
-        },
+        action: () => {},
         icon: ImageIcon,
       },
     ]
@@ -122,6 +119,8 @@ function createSuggestionRenderer(component: Component): SuggestionOptions['rend
         if (!props.clientRect)
           return
 
+        globalClientRect = props.clientRect as GetReferenceClientRect
+
         popup = tippy(document.body, {
           getReferenceClientRect: props.clientRect as GetReferenceClientRect,
           appendTo: () => document.body,
@@ -131,6 +130,8 @@ function createSuggestionRenderer(component: Component): SuggestionOptions['rend
           trigger: 'manual',
           placement: 'bottom-start',
         })
+
+        globalPopupInstance = popup
       },
 
       // Use arrow function here because Nuxt will transform it incorrectly as Vue hook causing the build to fail
@@ -148,6 +149,8 @@ function createSuggestionRenderer(component: Component): SuggestionOptions['rend
         if (!props.clientRect)
           return
 
+        globalClientRect = props.clientRect as GetReferenceClientRect
+
         popup?.setProps({
           getReferenceClientRect: props.clientRect as GetReferenceClientRect,
         })
@@ -158,14 +161,28 @@ function createSuggestionRenderer(component: Component): SuggestionOptions['rend
           popup?.hide()
           return true
         }
-        console.log(props)
         return renderer?.ref?.onKeyDown(props.event)
       },
 
       onExit() {
         popup?.destroy()
         renderer?.destroy()
+        globalPopupInstance = null
       },
+    }
+  }
+}
+
+export function toggleSuggestionTippyPopup(show: boolean) {
+  if (globalPopupInstance) {
+    if (show && globalClientRect) {
+      globalPopupInstance.setProps({
+        getReferenceClientRect: globalClientRect,
+      })
+      globalPopupInstance.show()
+    }
+    else {
+      globalPopupInstance.hide()
     }
   }
 }
